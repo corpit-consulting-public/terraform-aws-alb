@@ -57,3 +57,8 @@ output "security_groups" {
   description = "List of Security Groups IDs"
   value       = "${aws_lb.application_no_logs.*.security_groups}"
 }
+
+output "arn" {
+  description = "The full ARN of the load balancer."
+  value       = "${element(concat(aws_lb.application_no_logs.*.arn, aws_lb.application.*.arn), 0)}"
+}
