@@ -2,7 +2,7 @@ resource "aws_lb" "application_no_logs" {
   load_balancer_type               = "${var.load_balancer_type}"
   name                             = "${var.load_balancer_name}"
   internal                         = "${var.load_balancer_is_internal}"
- # security_groups                  = ["${var.security_groups}"]
+  security_groups                  = ["${var.security_groups}"]
   subnets                          = ["${var.subnets}"]
   idle_timeout                     = "${var.idle_timeout}"
   enable_cross_zone_load_balancing = "${var.enable_cross_zone_load_balancing}"
@@ -17,8 +17,30 @@ resource "aws_lb" "application_no_logs" {
     update = "${var.load_balancer_update_timeout}"
   }
 
-  count = "${var.logging_enabled ? 0 : 1}"
+  count      = "${var.load_balancer_type == "application" && !(var.logging_enabled)? 1 : 0}"
 }
+
+resource "aws_lb" "network_no_logs" {
+  load_balancer_type               = "${var.load_balancer_type}"
+  name                             = "${var.load_balancer_name}"
+  internal                         = "${var.load_balancer_is_internal}"
+  subnets                          = ["${var.subnets}"]
+  idle_timeout                     = "${var.idle_timeout}"
+  enable_cross_zone_load_balancing = "${var.enable_cross_zone_load_balancing}"
+  enable_deletion_protection       = "${var.enable_deletion_protection}"
+  enable_http2                     = "${var.enable_http2}"
+  ip_address_type                  = "${var.ip_address_type}"
+  tags                             = "${merge(var.tags, map("Name", var.load_balancer_name))}"
+
+  timeouts {
+    create = "${var.load_balancer_create_timeout}"
+    delete = "${var.load_balancer_delete_timeout}"
+    update = "${var.load_balancer_update_timeout}"
+  }
+
+  count      = "${var.load_balancer_type == "network" && !var.logging_enabled? 1 : 0}"
+}
+
 
 resource "aws_lb_target_group" "main_no_logs" {
   name                 = "${lookup(var.target_groups[count.index], "name")}"
