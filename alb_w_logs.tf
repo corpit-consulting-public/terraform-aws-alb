@@ -26,7 +26,7 @@ resource "aws_lb" "application" {
   count      = "${var.load_balancer_type == "application" && var.logging_enabled? 1 : 0}"
 }
 
-resource "aws_lb" "application" {
+resource "aws_lb" "network" {
   load_balancer_type               = "${var.load_balancer_type}"
   name                             = "${var.load_balancer_name}"
   internal                         = "${var.load_balancer_is_internal}"
