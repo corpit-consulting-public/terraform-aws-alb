@@ -138,7 +138,7 @@ resource "aws_lb_target_group" "main_no_logs_nw_lb" {
 }
 
 resource "aws_lb_listener" "frontend_http_tcp_no_logs_nw_lb" {
-  load_balancer_arn = "${element(concat(aws_lb.application_no_logs.*.arn, list("")), 0)}"
+  load_balancer_arn = "${element(concat(aws_lb.network_no_logs.*.arn, list("")), 0)}"
   port              = "${lookup(var.http_tcp_listeners[count.index], "port")}"
   protocol          = "${lookup(var.http_tcp_listeners[count.index], "protocol")}"
   count             = "${!(var.load_balancer_type == "network" || var.logging_enabled) ? 0 : var.http_tcp_listeners_count}"
@@ -150,7 +150,7 @@ resource "aws_lb_listener" "frontend_http_tcp_no_logs_nw_lb" {
 }
 
 resource "aws_lb_listener" "frontend_https_tcp_no_logs_nw_lb" {
-  load_balancer_arn = "${element(concat(aws_lb.application_no_logs.*.arn, list("")), 0)}"
+  load_balancer_arn = "${element(concat(aws_lb.network_no_logs.*.arn, list("")), 0)}"
   port              = "${lookup(var.https_listeners[count.index], "port")}"
   protocol          = "TCP"
   count             = "${!(var.load_balancer_type == "network" || var.logging_enabled) ? 0 : var.https_listeners_count}"
