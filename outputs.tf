@@ -55,7 +55,7 @@ output "target_group_names" {
 
 output "security_groups" {
   description = "List of Security Groups IDs"
-  value       = "${element(concat(aws_lb.application_no_logs.*.security_groups, aws_lb.network_no_logs.*.security_groups), 0)}"
+  value       = "${aws_lb.application_no_logs.*.security_groups}"
 }
 
 output "arn" {
