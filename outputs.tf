@@ -60,5 +60,5 @@ output "security_groups" {
 
 output "arn" {
   description = "The ARN of the load balancer"
-  value       = "${slice(concat(aws_lb.application.*.arn, aws_lb.application_no_logs.*.arn, aws_lb.network_no_logs.arn, aws_lb.network.*.arn), 0)}"
+  value       = "${concat(aws_lb.application.*.arn, aws_lb.application_no_logs.*.arn, aws_lb.network_no_logs.arn, aws_lb.network.*.arn), 0}"
 }
