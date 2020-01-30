@@ -152,7 +152,7 @@ resource "aws_lb_listener" "frontend_http_tcp_no_logs_nw_lb" {
 resource "aws_lb_listener" "frontend_https_tcp_no_logs_nw_lb" {
   load_balancer_arn = "${element(concat(aws_lb.application_no_logs.*.arn, list("")), 0)}"
   port              = "${lookup(var.https_listeners[count.index], "port")}"
-  protocol          = "${lookup(var.https_tcp_listeners[count.index], "protocol")}"
+  protocol          = "${lookup(var.https_listeners[count.index], "protocol")}"
   count             = "${!(var.load_balancer_type == "network" || var.logging_enabled) ? 0 : var.https_listeners_count}"
 
   default_action {
